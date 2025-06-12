@@ -74,6 +74,12 @@
             overflow: hidden; /* Prevent scrolling when mobile menu is open */
         }
 
+        /* Disable tap highlight color for all interactive elements */
+        a, button, label, .filter-btn, .view-cert-btn, .view-resume-btn, .theme-switch {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none; /* Disable callout on long press */
+        }
+
         /* Container */
         .container {
             max-width: 1200px; /* Increased from 1100px for more space */
@@ -333,8 +339,8 @@
         /* Profile Image Container */
         .profile-image-container {
             margin-bottom: 2rem; /* Space between image and text */
-            width: 162px; /* Fixed width for the image container */
-            height: 199px; /* Fixed height for the image container */
+            width: 128.7px; /* Fixed width for the image container */
+            height: 158px; /* Fixed height for the image container */
             border-radius: 30%; /* Make it circular */
             overflow: hidden; /* Hide overflow for circular shape */
             border: 10px solid #fff; /* White border */
@@ -453,6 +459,15 @@
             color: var(--text-color); /* Ensures good contrast in both themes */
             margin-bottom: 10px;
         }
+        
+        .timeline-item ul {
+            padding-left: 20px; /* Default padding for bullet points */
+        }
+        
+        .timeline-item li {
+            margin-bottom: 5px; /* Space between list items */
+        }
+
 
         /* Project Filtering */
         .project-filters {
@@ -727,6 +742,11 @@
                 padding: 1.5rem;
             }
 
+            /* Adjust bullet point padding for smaller screens */
+            .timeline-item ul {
+                padding-left: 15px; /* Reduced padding for mobile */
+            }
+
             .project-card-content {
                 padding: 1rem;
             }
@@ -828,7 +848,7 @@
         <div class="container" style="text-align: center;">
             <h3 class="section-title">About Me</h3>
             <p style="max-width: 800px; margin: auto;">
-                I am Venu R, a Computer Science graduate with a strong foundation in Software development, System administration, Networking, Web appliction development and a keen interest in AI-driven applications. My journey has equipped me with a diverse skill set, allowing me to tackle various technical challenges and deliver effective solutions. I am passionate about leveraging technology to create impactful projects, as demonstrated by my work on VisionGrid (an AI-powered camera streaming app) and a Transformer-based Logical Inference System. Some of My certifications, including Red Hat System Administration(RHCSA), Python with DataSience(NPTEL) and CCNAv7(CISCO) reflect my commitment to continuous learning and professional growth. I thrive in dynamic environments and am always eager to contribute to innovative endeavors that push the boundaries of what's possible in the tech landscape.
+                I’m Venu R, a Computer Science graduate with a strong background in software development, system administration, networking, and web applications. I’m passionate about building impactful tech solutions, with projects like VisionGrid (AI-powered camera streaming) and a Transformer-based Logical Inference System. Certified in RHCSA, Python with Data Science (NPTEL), and CCNAv7, I’m committed to continuous learning and thrive in dynamic, innovation-driven environments.
             </p>
         </div>
     </section>
@@ -896,49 +916,49 @@
             <div class="project-grid">
                 <div class="project-card" data-domain="ai web">
                     <div class="project-card-content">
-                        <h4>VisionGrid</h4>
+                        <h4 style="font-size:1.5em; ">VisionGrid</h4>
                         <p class="project-description">A comprehensive web application for real-time IP camera streaming and management, utilizing YOLO-based inference for object detection. It supports ROI drawing on video streams, with backend integration for advanced detection and analytics, optimized for dynamic environments. The app is built with React and Flask, ensuring seamless user experience and efficient video processing.</p>
                         <a href="https://github.com/VenuR0071/VisionGrid" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="ai">
                     <div class="project-card-content">
-                        <h4>Transformer-based Logical Inference System</h4>
+                        <h4 style="font-size:1.5em; ">Transformer-based Logical Inference System</h4>
                         <p class="project-description">Developed a framework to improve deductive reasoning using LogiTorch to train a T5-based soft reasoning transformer model, integrated with BERT for MCQ generation, enhancing logical conclusions.</p>
                         <a href="https://github.com/VenuR0071/Transformer-model-based-logical-inference-system" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="iot ai web">
                     <div class="project-card-content">
-                        <h4>BMI Digital Signage Kiosk</h4>
+                        <h4 style="font-size:1.5em; ">BMI Digital Signage Kiosk</h4>
                         <p class="project-description">The BMI kiosk uses ESP32 microcontrollers with load cells and ultrasonic sensors for weight and height, communicating via MQTT to a Raspberry Pi. It features facial recognition with OpenCV/DLIB, voice input via Google Speech API, and a Python backend with MongoDB. Digital signage is powered by a VPS-hosted content system.</p>
                         <a href="https://github.com/VenuR0071/BMI-Digital-signage-Kiosk" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="iot">
                     <div class="project-card-content">
-                        <h4>Low Bandwidth MQTT Tracking System</h4>
+                        <h4 style="font-size:1.5em;">Low Bandwidth MQTT Tracking System</h4>
                         <p class="project-description">A low-bandwidth tracking system uses an ESP32 with GPS, sending data via MQTT over a VPN to a broker. A mobile app subscribes to the broker for real-time location updates, ensuring secure, efficient tracking.</p>
                         <a href="https://github.com/VenuR0071/Low-bandwidth-tracking-system-using-MQTT" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="ai web">
                     <div class="project-card-content">
-                        <h4>Traveling Companion App using ChatGPT</h4>
+                        <h4 style="font-size:1.5em;">Traveling Companion App using ChatGPT</h4>
                         <p class="project-description">A React Native app using ChatGPT to offer real-time assistance and personalized travel recommendations for users during their travels. It leverages AI to provide guidance, answer queries, and enhance the travel experience.</p>
                         <a href="https://github.com/VenuR0071/Traveling-companion-app-using-CHATGPT" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="iot web">
                     <div class="project-card-content">
-                        <h4>Bluetooth Signal Interception using Chrome</h4>
+                        <h4 style="font-size:1.5em;">Bluetooth Signal Interception using Chrome</h4>
                         <p class="project-description">A website using Chrome can capture Bluetooth signals by utilizing the Web Bluetooth API to intercept signals from devices like the MI scale. This allows the website to receive and process data transmitted via Bluetooth from compatible devices.</p>
                         <a href="https://github.com/VenuR0071/Bluetooth-signal-interception-using-chrome" class="project-link">View on GitHub &rarr;</a>
                     </div>
                 </div>
                 <div class="project-card" data-domain="web">
                     <div class="project-card-content">
-                        <h4>Web Hosting using Raspberry Pi</h4>
+                        <h4 style="font-size:1.5em;">Web Hosting using Raspberry Pi</h4>
                         <p class="project-description">Web hosting on a Raspberry Pi involves running a web server (e.g., Apache or Nginx) and configuring port forwarding on the router to expose the Pi's local IP to a public IP, enabling external access to the hosted website.</p>
                         <a href="https://github.com/VenuR0071/Web-hosting-using-Raspberry-pi" class="project-link">View on GitHub &rarr;</a>
                     </div>
@@ -953,7 +973,7 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <h4>B.E. Computer Science</h4>
-                    <p style="font-weight: bold;" class="company">K.C.G COLLEGE OF TECHNOLOGY</p>
+                    <p style="font-weight: bold;" class="company">K.C.G College of Technology</p>
                     <p class="date">2020 - 2024 | CGPA: 8.25</p>
                 </div>
                 <div class="timeline-item">
@@ -1027,10 +1047,10 @@
             <div class="languages-interests-grid">
                 <div class="language-entry">
                     <h4>Languages</h4>
-                    <p style="font-weight: bold;">Tamil<p>
-                        <p> Full Professional Proficiency</p>
+                    <p style="font-weight: bold;">Tamil</p>
+                    <p>Full Professional Proficiency</p>
                     <p style="font-weight: bold;">English</p> 
-                    <p></p>Full Professional Proficiency</p>
+                    <p>Full Professional Proficiency</p>
                 </div>
                 <div class="interest-entry">
                     <h4>Interests</h4>
@@ -1053,7 +1073,7 @@
             <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/venu-r-0b721024a"
                     target="_blank">linkedin.com/in/venu-r-0b721024a</a></p>
             <p><strong>Location:</strong> Chennai, India</p>
-            <button class="view-resume-btn" data-src="./V7SOFT.pdf">View My Resume &rarr;</button>
+            <button class="view-resume-btn" data-src="./VenuR4SOFTWARE.pdf">View My Resume &rarr;</button>
         </div>
     </section>
 
