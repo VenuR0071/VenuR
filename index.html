@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venu R - Interactive Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            /* Light theme colors */
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --primary-color: skyblue;
+            --secondary-color: deepskyblue;
+            --card-bg: #fff;
+            --border-color: #ddd;
+            --header-bg: #fff;
+            --header-border: #ddd;
+            --button-filter-bg: #e9ecef;
+            --button-filter-hover-bg: #ccc;
+            --box-shadow-light: rgba(0, 0, 0, 0.05);
+            --box-shadow-medium: rgba(0, 0, 0, 0.1);
+            --box-shadow-strong: rgba(0, 0, 0, 0.15);
+            --modal-overlay-bg: rgba(0, 0, 0, 0.8);
+            --footer-bg: #333;
+            --footer-text-color: #fff;
+        }
+
+        /* Dark theme colors */
+        body.dark-theme {
+            --bg-color: #1a1a2e;
+            --text-color: #e0e0e0; /* Light grey for good contrast on dark backgrounds */
+            --primary-color: skyblue; /* Keep accent color */
+            --secondary-color: deepskyblue; /* Keep accent color */
+            --card-bg: #2c2c4d;
+            --border-color: #4a4a6e;
+            --header-bg: #2c2c4d;
+            --header-border: #4a4a6e;
+            --button-filter-bg: #4a4a6e;
+            --button-filter-hover-bg: #5a5a7e;
+            --box-shadow-light: rgba(0, 0, 0, 0.3);
+            --box-shadow-medium: rgba(0, 0, 0, 0.4);
+            --box-shadow-strong: rgba(0, 0, 0, 0.5);
+            --modal-overlay-bg: rgba(0, 0, 0, 0.9);
+            --footer-bg: #1a1a2e;
+            --footer-text-color: #e0e0e0;
+        }
+
+        /* General Body Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+            /* Disable text selection and change cursor */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Standard syntax */
+            cursor: default; /* Default cursor for entire body */
+        }
+
+        body.no-scroll {
+            overflow: hidden; /* Prevent scrolling when mobile menu is open */
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px; /* Increased from 1100px for more space */
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px; /* Responsive padding */
+        }
+
+        /* Header & Navigation */
+        header {
+            background: var(--header-bg);
+            color: var(--text-color);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--header-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--box-shadow-light);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allow navigation to wrap on smaller screens */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        /* Styles for the main desktop navigation */
+        header nav#mainNav {
+            flex-grow: 1; /* Allow nav to take available space */
+            text-align: center; /* Center nav links if there's space */
+        }
+
+        header nav#mainNav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center nav items within the nav area */
+            flex-wrap: nowrap; /* Prevent wrapping on desktop */
+        }
+
+        header nav#mainNav ul li {
+            margin: 0 10px; /* Adjust margin for desktop nav items */
+        }
+
+        header nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            cursor: pointer; /* Restore pointer cursor for links */
+        }
+
+        header nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Container for right-side controls (theme toggle and hamburger) */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Space between theme toggle and menu icon */
+        }
+
+        /* Theme Toggle Switch */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            /* Removed margin-left as it's now handled by gap in header-controls */
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 48px;
+            cursor: pointer; /* Ensure the whole label is clickable */
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        /* The moving knob */
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+            z-index: 2; /* Ensure knob is above icons */
+        }
+
+        /* Slider state when checked (dark mode) */
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Icon styling */
+        .slider .icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem; /* Size of the emoji icon */
+            transition: opacity 0.3s ease, color 0.3s ease;
+            z-index: 1; /* Ensure icons are above the slider background */
+            line-height: 1; /* Adjust line height for better vertical centering */
+        }
+
+        .slider .sun-icon {
+            left: 6px; /* Position on the left side of the track */
+            opacity: 0; /* Hidden initially (light mode knob on left) */
+            color: #f7a000; /* Sun color */
+        }
+
+        .slider .moon-icon {
+            right: 6px; /* Position on the right side of the track */
+            opacity: 1; /* Visible initially (light mode knob on left, moon is opposite) */
+            color: #e0e0e0; /* Moon color */
+        }
+
+        /* When checkbox is checked (dark mode) */
+        input:checked + .slider .sun-icon {
+            opacity: 1; /* Show sun in dark mode (sun is opposite to dark mode knob) */
+        }
+
+        input:checked + .slider .moon-icon {
+            opacity: 0; /* Hide moon in dark mode */
+        }
+
+        /* Hamburger Menu Icon */
+        .menu-icon {
+            display: none; /* Hidden by default on desktop */
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001; /* Above header and nav */
+        }
+
+        .menu-icon .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color);
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        /* Hamburger icon animation (optional) */
+        .menu-icon.open .bar:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .menu-icon.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-icon.open .bar:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--header-bg); /* Use a theme variable */
+            z-index: 999;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%); /* Start off-screen */
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0); /* Slide in */
+            display: block; /* Show when active */
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 80px 20px 20px 20px; /* Adjust padding for header space */
+            margin: 0;
+            text-align: center;
+        }
+
+        .mobile-menu ul li {
+            margin: 20px 0;
+        }
+
+        .mobile-menu ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.5rem;
+            display: block; /* Make links full width for easier tapping */
+            padding: 10px 0;
+            cursor: pointer; /* Restore pointer cursor for links */
+        }
+
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-color);
+            color: #333; /* Kept dark for consistent contrast on skyblue background */
+            padding: 4rem 0; /* Consistent padding */
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* Arrange content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        .hero h2 {
+            font-size: clamp(2rem, 6vw, 2.8rem); /* Responsive font size */
+            margin: 0 0 10px 0;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem); /* Responsive font size */
+            margin-bottom: 20px;
+        }
+
+        .hero .social-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        /* Profile Image Container */
+        .profile-image-container {
+            margin-bottom: 2rem; /* Space between image and text */
+            width: 162px; /* Fixed width for the image container */
+            height: 199px; /* Fixed height for the image container */
+            border-radius: 30%; /* Make it circular */
+            overflow: hidden; /* Hide overflow for circular shape */
+            border: 10px solid #fff; /* White border */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+            display: flex; /* Use flexbox to center content */
+            justify-content: center;
+            align-items: center;
+            background-color: transparent; /* No background for loading */
+        }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit:scale-down; /* Cover the container without distortion */
+            display: block;
+        }
+
+
+        /* Sections */
+        section {
+            padding: 4rem 0; /* Consistent padding */
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h3.section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 5vw, 2rem); /* Responsive font size */
+            margin-bottom: 4rem; /* Increased margin to prevent cut-off */
+            position: relative;
+            transition: color 0.3s ease;
+            cursor: default; /* Ensure default cursor for titles */
+        }
+
+        /* Reactive title color on hover */
+        h3.section-title:hover {
+            color: var(--secondary-color);
+        }
+
+        h3.section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Line expansion on hover */
+        h3.section-title:hover::after {
+            width: 100px;
+            background-color: var(--secondary-color);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem; /* Increased from 1rem for better spacing */
+            margin-top: 2rem; /* Added space on top */
+            margin-bottom: 2rem; /* Added space on bottom */
+        }
+
+        .skill {
+            background: var(--card-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px var(--box-shadow-medium);
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+            cursor: default; /* Ensure default cursor for skills */
+        }
+
+        .skill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px var(--box-shadow-strong);
+        }
+
+        /* Experience Section */
+        .timeline {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .timeline-item {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px var(--box-shadow-medium);
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            cursor: default; /* Ensure default cursor for timeline items */
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.02);
+        }
+
+        .timeline-item h4 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .timeline-item .date,
+        .timeline-item .company {
+            color: var(--text-color); /* Ensures good contrast in both themes */
+            margin-bottom: 10px;
+        }
+
+        /* Project Filtering */
+        .project-filters {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            background: var(--button-filter-bg);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            color: var(--text-color); /* Ensures filter button text respects theme */
+        }
+
+        .filter-btn:hover {
+            background-color: var(--button-filter-hover-bg);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* Projects Grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px var(--box-shadow-medium);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s ease, color 0.3s ease;
+            cursor: default; /* Ensure default cursor for project cards */
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--box-shadow-strong);
+        }
+
+        .project-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex; /* Make it a flex container */
+            flex-direction: column; /* Stack children vertically */
+            justify-content: space-between; /* Pushes the link to the bottom */
+        }
+
+        .project-card-content p {
+            flex-grow: 1; /* Allow description to take up available space, pushing link down */
+            margin-bottom: 15px; /* Add some space above the link */
+        }
+
+        .project-card .project-link {
+            display: inline-block;
+            margin-top: auto; /* Pushes the link to the bottom */
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer; /* Restore pointer cursor for links */
+            align-self: flex-start; /* Align the link to the start (left) within the flex column */
+        }
+
+        .project-card .project-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Certifications */
+        .cert-entry {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            margin: auto auto 1.5rem auto;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px var(--box-shadow-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+            cursor: default; /* Ensure default cursor for cert entries */
+        }
+        
+        .cert-entry:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px var(--box-shadow-strong);
+        }
+
+
+        .view-cert-btn {
+            background: var(--primary-color);
+            color: #333; /* Changed to a dark color for contrast */
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-cert-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Certificate Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: var(--modal-overlay-bg);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* New styling for the iframe inside the modal */
+        .modal-content-iframe {
+            margin: auto;
+            display: block;
+            max-width: 80%; /* Adjust as needed */
+            max-height: 80%; /* Adjust as needed */
+            width: 100%; /* Make iframe take full width of its container */
+            height: 100%; /* Make iframe take full height of its container */
+            border: none; /* Remove default iframe border */
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 25px;
+            right: 45px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--footer-bg);
+            color: var(--footer-text-color);
+            text-align: center;
+            padding: 1.5rem 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: default; /* Ensure default cursor for footer */
+        }
+
+        /* Languages and Interests Section Specifics */
+        .languages-interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 3rem;
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 1%;
+        }
+
+        .language-entry, .interest-entry {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px var(--box-shadow-medium);
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+            cursor: default; /* Ensure default cursor for these entries */
+        }
+
+        .language-entry:hover, .interest-entry:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px var(--box-shadow-strong);
+        }
+
+        .language-entry h4, .interest-entry h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .language-entry p, .interest-entry p {
+            color: var(--text-color); /* Ensures good contrast in both themes */
+            margin-bottom: 0;
+            font-size: 1rem;        
+        }
+
+        /* Contact Section specific styling for links */
+        #contact a {
+            color: var(--primary-color); /* Use the primary accent color for contrast */
+            text-decoration: underline; /* Emphasize it's a link */
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        #contact a:hover {
+            color: var(--secondary-color); /* Add a hover effect */
+        }
+
+        .view-resume-btn {
+            background: var(--primary-color);
+            color: #333; /* Dark text for contrast */
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Space from other contact info */
+        }
+
+        .view-resume-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            header nav#mainNav {
+                display: none; /* Hide desktop nav */
+            }
+            .menu-icon {
+                display: block; /* Show hamburger icon */
+            }
+            header .container {
+                justify-content: space-between; /* Ensure logo and header controls are separate */
+                align-items: center; /* Vertically align items */
+            }
+            /* theme-switch-wrapper's margin handled by header-controls gap */
+
+            /* Adjust project grid min width for smaller phones */
+            .project-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted min-width */
+            }
+
+            /* Further refine padding for very small screens */
+            .container {
+                padding: 0 15px; /* Slightly less padding on very small screens */
+            }
+
+            section {
+                padding: 3rem 0; /* Slightly less vertical padding on sections */
+            }
+
+            .hero {
+                padding: 3rem 0;
+            }
+
+            .hero h2 {
+                font-size: clamp(1.8rem, 5vw, 2.5rem);
+            }
+
+            .hero p {
+                font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            }
+
+            h3.section-title {
+                font-size: clamp(1.6rem, 5vw, 1.8rem);
+                margin-bottom: 3rem; /* Adjust margin for mobile */
+            }
+
+            .timeline-item {
+                padding: 1.5rem;
+            }
+
+            .project-card-content {
+                padding: 1rem;
+            }
+
+            .cert-entry {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: flex-start; /* Align items to the start */
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .cert-entry button {
+                margin-top: 15px; /* Add space between text and button */
+                width: 100%; /* Make button full width */
+            }
+
+            .languages-interests-grid {
+                grid-template-columns: 1fr; /* Single column layout on mobile */
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .filter-btn {
+                padding: 0.6rem 1rem;
+                margin: 0 3px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Venu R</h1>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#certifications">Certifications</a></li>
+                    <li><a href="#languages-interests">Languages & Interests</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-controls">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round">
+                            <span class="icon sun-icon">☀️</span>
+                            <span class="icon moon-icon">🌙</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="menu-icon" id="menuToggle">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Structure -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="#languages-interests">Languages & Interests</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+
+    <section class="hero">
+        <div class="profile-image-container" id="profileImageContainer">
+            <!-- Image will be loaded from the local folder -->
+            <img id="profileImage" src="./VenuR.jpeg" alt="Venu R Profile Picture">
+        </div>
+        <div class="container">
+            <h2>Software & System Engineer | AI Enthusiast | Full Stack Developer</h2>
+            <p>A versatile Computer Science graduate with experience across software development, system administration, networking, and AI-driven applications. Adept at adapting to diverse technical challenges and delivering practical solutions. Committed to continuous learning and contributing to innovative projects.</p>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container" style="text-align: center;">
+            <h3 class="section-title">About Me</h3>
+            <p style="max-width: 800px; margin: auto;">
+                I am Venu R, a Computer Science graduate with a strong foundation in Software development, System administration, Networking, Web appliction development and a keen interest in AI-driven applications. My journey has equipped me with a diverse skill set, allowing me to tackle various technical challenges and deliver effective solutions. I am passionate about leveraging technology to create impactful projects, as demonstrated by my work on VisionGrid (an AI-powered camera streaming app) and a Transformer-based Logical Inference System. Some of My certifications, including Red Hat System Administration(RHCSA), Python with DataSience(NPTEL) and CCNAv7(CISCO) reflect my commitment to continuous learning and professional growth. I thrive in dynamic environments and am always eager to contribute to innovative endeavors that push the boundaries of what's possible in the tech landscape.
+            </p>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h3 class="section-title">Skills</h3>
+            <div class="skills-grid">
+                <div class="skill">Networking</div>
+                <div class="skill">Linux System Administration</div>
+                <div class="skill">Python</div>
+                <div class="skill">MQTT</div>
+                <div class="skill">React</div>
+                <div class="skill">AI/ML</div>
+                <div class="skill">Computer Vision</div>
+                <div class="skill">IoT</div>
+                <div class="skill">C Programming</div>
+                <div class="skill">Shell Script</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="container">
+            <h3 class="section-title">Work Experience</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Server Administrator Intern</h4>
+                    <p style="font-weight: bold;"class="company">SPR Systems, Chennai</p>
+                    <p class="date">06/2024 - 08/2024</p>
+                    <p style="font-weight: bold;"><em>A private IT and Network Consultancy Firm based in Chennai, India.</em></p>
+                    <ul>
+                        <li>Maintained a Debian server for the client.</li>
+                        <li>Enabled HTTPS protection for the website.</li>
+                        <li>Troubleshoot and created cronjobs for automatic SSL certificate renewal.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h4>Computer Vision Intern</h4>
+                    <p style="font-weight: bold;"class="company">YOCO Labs, Chennai</p>
+                    <p class="date">02/2024 - 05/2024</p>
+                    <p style="font-weight: bold;"><em>An AI based Video Analytics Software Company based in Chennai, India and founded in 2021.</em></p>
+                    <ul>
+                        <li>Developed a web application using React and Python which can stream "n" number of cameras and can provide inference using YOLOV8 model.</li>
+                        <li>Trained custom AI models for specific use cases.</li>
+                        <li>Fine-tuned machine learning algorithms.</li>
+                        <li>Optimized IP camera streams in the local network.</li>
+                        <li>Classified and annotated large datasets.</li>
+                        <li>Tested inference in real-world scenarios.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h3 class="section-title">Projects</h3>
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="ai">AI / ML</button>
+                <button class="filter-btn" data-filter="iot">IoT</button>
+                <button class="filter-btn" data-filter="web">Full Stack & Web</button>
+            </div>
+            <div class="project-grid">
+                <div class="project-card" data-domain="ai web">
+                    <div class="project-card-content">
+                        <h4>VisionGrid</h4>
+                        <p class="project-description">A comprehensive web application for real-time IP camera streaming and management, utilizing YOLO-based inference for object detection. It supports ROI drawing on video streams, with backend integration for advanced detection and analytics, optimized for dynamic environments. The app is built with React and Flask, ensuring seamless user experience and efficient video processing.</p>
+                        <a href="https://github.com/VenuR0071/VisionGrid" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="ai">
+                    <div class="project-card-content">
+                        <h4>Transformer-based Logical Inference System</h4>
+                        <p class="project-description">Developed a framework to improve deductive reasoning using LogiTorch to train a T5-based soft reasoning transformer model, integrated with BERT for MCQ generation, enhancing logical conclusions.</p>
+                        <a href="https://github.com/VenuR0071/Transformer-model-based-logical-inference-system" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="iot ai web">
+                    <div class="project-card-content">
+                        <h4>BMI Digital Signage Kiosk</h4>
+                        <p class="project-description">The BMI kiosk uses ESP32 microcontrollers with load cells and ultrasonic sensors for weight and height, communicating via MQTT to a Raspberry Pi. It features facial recognition with OpenCV/DLIB, voice input via Google Speech API, and a Python backend with MongoDB. Digital signage is powered by a VPS-hosted content system.</p>
+                        <a href="https://github.com/VenuR0071/BMI-Digital-signage-Kiosk" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="iot">
+                    <div class="project-card-content">
+                        <h4>Low Bandwidth MQTT Tracking System</h4>
+                        <p class="project-description">A low-bandwidth tracking system uses an ESP32 with GPS, sending data via MQTT over a VPN to a broker. A mobile app subscribes to the broker for real-time location updates, ensuring secure, efficient tracking.</p>
+                        <a href="https://github.com/VenuR0071/Low-bandwidth-tracking-system-using-MQTT" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="ai web">
+                    <div class="project-card-content">
+                        <h4>Traveling Companion App using ChatGPT</h4>
+                        <p class="project-description">A React Native app using ChatGPT to offer real-time assistance and personalized travel recommendations for users during their travels. It leverages AI to provide guidance, answer queries, and enhance the travel experience.</p>
+                        <a href="https://github.com/VenuR0071/Traveling-companion-app-using-CHATGPT" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="iot web">
+                    <div class="project-card-content">
+                        <h4>Bluetooth Signal Interception using Chrome</h4>
+                        <p class="project-description">A website using Chrome can capture Bluetooth signals by utilizing the Web Bluetooth API to intercept signals from devices like the MI scale. This allows the website to receive and process data transmitted via Bluetooth from compatible devices.</p>
+                        <a href="https://github.com/VenuR0071/Bluetooth-signal-interception-using-chrome" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+                <div class="project-card" data-domain="web">
+                    <div class="project-card-content">
+                        <h4>Web Hosting using Raspberry Pi</h4>
+                        <p class="project-description">Web hosting on a Raspberry Pi involves running a web server (e.g., Apache or Nginx) and configuring port forwarding on the router to expose the Pi's local IP to a public IP, enabling external access to the hosted website.</p>
+                        <a href="https://github.com/VenuR0071/Web-hosting-using-Raspberry-pi" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container">
+            <h3 class="section-title">Education</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>B.E. Computer Science</h4>
+                    <p style="font-weight: bold;" class="company">K.C.G COLLEGE OF TECHNOLOGY</p>
+                    <p class="date">2020 - 2024 | CGPA: 8.25</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>HSC</h4>
+                    <p style="font-weight: bold;"class="company">VANA VANI MATRICULATION HIGHER SECONDARY SCHOOL</p>
+                    <p class="date">2019 - 2020 | Percentage: 66</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>SSLC</h4>
+                    <p style="font-weight: bold;"class="company">VANA VANI MATRICULATION HIGHER SECONDARY SCHOOL</p>
+                    <p class="date">2017 - 2018 | Percentage: 82</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications">
+        <div class="container">
+            <h3 class="section-title">Certifications</h3>
+            <p style="text-align: center; max-width: 800px; margin: auto auto 2rem auto;">
+                My certifications are a testament to my dedication to mastering key technologies. You can verify the authenticity of each certificate by clicking on "View Certificate".
+            </p>
+            <div class="cert-entry">
+                <div>
+                    <h4>RED HAT SYSTEM ADMINISTRATION RHEL 7</h4>
+                    <p class="issuer">RedHat | Issued: 07/2017</p>
+                </div>
+                <button class="view-cert-btn" data-src="./rhcsa.pdf">View Certificate</button>
+            </div>
+            <div class="cert-entry">
+                <div>
+                    <h4>CCNAV7: INTRODUCTION TO NETWORKS</h4>
+                    <p class="issuer">CISCO | Issued: 12/2023</p>
+                </div>
+                <button class="view-cert-btn" data-src="./cisco.pdf">View Certificate</button>
+            </div>
+            <div class="cert-entry">
+                <div>
+                    <h4>FUNDAMENTALS OF CONTAINERS, KUBERNETES AND OPENSHIFT</h4>
+                    <p class="issuer">RedHat | Issued: 02/2025</p>
+                </div>
+                <button class="view-cert-btn" data-src="./openshift.pdf">View Certificate</button>
+            </div>
+            <div class="cert-entry">
+                <div>
+                    <h4>PYTHON FOR DATASCIENCE</h4>
+                    <p class="issuer">NPTEL | Issued: 08/2023</p>
+                </div>
+                <button class="view-cert-btn" data-src="./nptel.pdf">View Certificate</button>
+            </div>
+            <div class="cert-entry">
+                <div>
+                    <h4>FULL STACK DEVELOPMENT</h4>
+                    <p class="issuer">Infosys SpringBoard | Issued: 03/2023</p>
+                </div>
+                <button class="view-cert-btn" data-src="./fullstack.pdf">View Certificate</button>
+            </div>
+            <div class="cert-entry">
+                <div>
+                    <h4>PRINCIPLES OF MANAGEMENT</h4>
+                    <p class="issuer">Great Learning | Issued: 08/2023</p>
+                </div>
+                <button class="view-cert-btn" data-src="./management.pdf">View Certificate</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="languages-interests">
+        <div class="container">
+            <h3 class="section-title">Languages & Interests</h3>
+            <div class="languages-interests-grid">
+                <div class="language-entry">
+                    <h4>Languages</h4>
+                    <p style="font-weight: bold;">Tamil<p>
+                        <p> Full Professional Proficiency</p>
+                    <p style="font-weight: bold;">English</p> 
+                    <p></p>Full Professional Proficiency</p>
+                </div>
+                <div class="interest-entry">
+                    <h4>Interests</h4>
+                    <p style="font-weight: bold;">Networks</p>
+                    <p style="font-weight: bold;">AI</p>
+                    <p style="font-weight: bold;">VLSI</p>
+                    <p style="font-weight: bold;">Quantum computing</p>
+                    <p style="font-weight: bold;">Piano</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container" style="text-align: center;">
+            <h3 class="section-title">Get In Touch</h3>
+            <p>I'm always open to discussing new projects, creative ideas, or opportunities. Feel free to reach out!</p>
+            <p><strong>Email:</strong> <a href="mailto:venur0071@gmail.com">venur0071@gmail.com</a></p>
+            <p><strong>Phone:</strong> +91 7010270071</p>
+            <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/venu-r-0b721024a"
+                    target="_blank">linkedin.com/in/venu-r-0b721024a</a></p>
+            <p><strong>Location:</strong> Chennai, India</p>
+            <button class="view-resume-btn" data-src="./V7SOFT.pdf">View My Resume &rarr;</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Venu R. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="certModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <!-- Changed from img to iframe -->
+        <iframe class="modal-content-iframe" id="certFrame" title="Certificate Viewer"></iframe>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Project Filtering Logic ---
+            const filterContainer = document.querySelector('.project-filters');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    // Update active button
+                    filterContainer.querySelector('.active').classList.remove('active');
+                    e.target.classList.add('active');
+
+                    const filter = e.target.getAttribute('data-filter');
+
+                    // Show/hide project cards
+                    projectCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-domain').includes(filter)) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
+            // --- Certificate and Resume Modal Logic ---
+            const modal = document.getElementById('certModal');
+            const certFrame = document.getElementById('certFrame'); // Reference to the iframe
+            const viewCertBtns = document.querySelectorAll('.view-cert-btn');
+            const viewResumeBtn = document.querySelector('.view-resume-btn'); // New: Resume button
+            const closeModal = document.querySelector('.close-modal');
+
+            // Handle View Certificate buttons
+            viewCertBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    certFrame.src = btn.getAttribute('data-src'); // Set iframe src
+                });
+            });
+
+            // Handle View Resume button
+            if (viewResumeBtn) { // Check if the resume button exists
+                viewResumeBtn.addEventListener('click', () => {
+                    modal.style.display = 'flex';
+                    certFrame.src = viewResumeBtn.getAttribute('data-src'); // Set iframe src for resume
+                });
+            }
+
+            // Close modal events
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+                certFrame.src = ''; // Clear iframe src when closing
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target == modal) {
+                    modal.style.display = 'none';
+                    certFrame.src = ''; // Clear iframe src when closing by clicking outside
+                }
+            });
+
+            // --- Theme Toggle Logic ---
+            const themeToggle = document.getElementById('checkbox');
+            const body = document.body;
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    body.classList.add('dark-theme');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.remove('dark-theme');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // --- Mobile Navigation Logic ---
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileNavLinks = mobileMenu.querySelectorAll('a');
+
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+                menuToggle.classList.toggle('open');
+                document.body.classList.toggle('no-scroll');
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    menuToggle.classList.remove('open');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
