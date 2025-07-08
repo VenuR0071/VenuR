@@ -676,21 +676,31 @@
         #contact a:hover {
             color: var(--secondary-color); /* Add a hover effect */
         }
-
+          /* Floating Resume Button Styles */
+        .floating-resume-button-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            /* The button itself already has styling, just need to position the wrapper */
+        }
         .view-resume-btn {
             background: var(--primary-color);
             color: #333; /* Dark text for contrast */
-            border: none;
+            border: 2px solid black; 
             padding: 0.8rem 1.5rem;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s ease;
-            margin-top: 20px; /* Space from other contact info */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
+           /* margin-top: 20px; Space from other contact info */
         }
 
         .view-resume-btn:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-color: var(--secondary-color); /* Make border match hover background */
         }
 
         /* Media Queries for Responsiveness */
@@ -766,6 +776,11 @@
             .languages-interests-grid {
                 grid-template-columns: 1fr; /* Single column layout on mobile */
                 gap: 1.5rem;
+            }
+            /* Adjust floating resume button position for smaller screens */
+            .floating-resume-button-wrapper {
+                bottom: 15px;
+                right: 15px;
             }
         }
 
@@ -1073,9 +1088,13 @@
             <p><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/venu-r-0b721024a"
                     target="_blank">linkedin.com/in/venu-r-0b721024a</a></p>
             <p><strong>Location:</strong> Chennai, India</p>
-            <button class="view-resume-btn" data-src="./V7SOFT.pdf">View My Resume &rarr;</button>
+            /*<button class="view-resume-btn" data-src="./V7SOFT.pdf">View My Resume &rarr;</button> */
         </div>
     </section>
+    <!-- Floating "View My Resume" Button -->
+    <div class="floating-resume-button-wrapper">
+        <button class="view-resume-btn"  data-src="./V7SOFT.pdf">View My Resume</button>
+    </div>
 
     <footer>
         <div class="container">
